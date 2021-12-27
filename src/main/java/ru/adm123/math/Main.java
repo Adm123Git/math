@@ -1,7 +1,6 @@
 package ru.adm123.math;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import org.openjdk.jmh.annotations.Benchmark;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +16,8 @@ public class Main {
 		System.out.println(str + " = " + calculate(str));
 	}
 
-	public static float calculate(@NotNull String str) {
+	@Benchmark
+	public static float calculate(String str) {
 		List<String> digits = new ArrayList<>(Arrays.asList(str.split("\\s*\\*|/|\\+|-\\s*")));
 		List<String> signs = new ArrayList<>(Arrays.asList(str.split("\\s*\\d+(\\.\\d+)?\\s*")));
 		for (int i = digits.size() - 1; i > 0; i--) {
@@ -33,9 +33,8 @@ public class Main {
 		return Float.parseFloat(digits.get(0));
 	}
 
-	@Nullable
-	private static String calcPair(@NotNull List<String> digits,
-								   @NotNull String sign,
+	private static String calcPair(List<String> digits,
+								   String sign,
 								   int i) {
 		if (sign.equals("*")) {
 			return String.valueOf(Float.parseFloat(digits.get(i - 1)) * Float.parseFloat(digits.get(i)));
@@ -52,19 +51,19 @@ public class Main {
 		return null;
 	}
 
-	private static void calcProcess(@NotNull List<String> digits,
-									@NotNull List<String> signs,
+	private static void calcProcess(List<String> digits,
+									List<String> signs,
 									int iterationIndex) {
 		digits.set(iterationIndex - 1, calcPair(digits, signs.get(iterationIndex), iterationIndex));
 		digits.remove(iterationIndex);
 		signs.remove(iterationIndex);
 	}
 
-	private static boolean isDivisionOrMultiplication(@NotNull String sign) {
+	private static boolean isDivisionOrMultiplication(String sign) {
 		return sign.equals("*") || sign.equals("/");
 	}
 
-	private static boolean isComplexityOrSubtraction(@NotNull String sign) {
+	private static boolean isComplexityOrSubtraction(String sign) {
 		return sign.equals("+") || sign.equals("-");
 	}
 
